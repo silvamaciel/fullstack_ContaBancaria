@@ -10,5 +10,4 @@ import com.apibanco.contabancaria.Entitys.Transacao;
 @Repository
 public interface TransacaoRepository extends JpaRepository<Transacao, Long> {
     List<Transacao> findByContaId(Long contaId);
-    Transacao saveTransacao(Transacao transaction);
 }
