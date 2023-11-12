@@ -9,47 +9,49 @@ import com.apibanco.contabancaria.Repository.ContaBancariaRepository;
 @Service
 public class ContaService {
     @Autowired
-    private ContaBancariaRepository ContaRepository;
+    private ContaBancariaRepository contaRepository;
 
     public ContaBancaria criarConta(String numeroDaConta){
         ContaBancaria conta = new ContaBancaria();
         conta.setNumeroDaConta(numeroDaConta);
         conta.setSaldo(0);
-        return ContaRepository.saveContaBancaria(conta);
+        return contaRepository.save(conta);
     }
 
     public ContaBancaria getContaByNumero(String numeroDaConta){
-        return ContaRepository.findByNumeroDaConta(numeroDaConta);
+        return contaRepository.findByNumeroDaConta(numeroDaConta);
     }
 
     public ContaBancaria getContaById(Long id){
-        return ContaRepository.findContaBancariaById(id);
+        return contaRepository.findById(id).orElse(null);
     }
 
     public void realizarDeposito(Long idDaConta, double valor){
-        ContaBancaria conta = ContaRepository.findContaBancariaById(idDaConta);
+        ContaBancaria conta = contaRepository.findById(idDaConta).orElse(null);
         if (conta != null){
             conta.setSaldo(conta.getSaldo() + valor);
-            ContaRepository.saveContaBancaria(conta);
+            contaRepository.save(conta);
         }
     }
 
     public void realizarSaque(Long idDaConta, double valor){
-        ContaBancaria conta = ContaRepository.findContaBancariaById(idDaConta);
+        ContaBancaria conta = contaRepository.findById(idDaConta).orElse(null);
         if (conta != null){
             conta.setSaldo(conta.getSaldo() - valor);
-            ContaRepository.saveContaBancaria(conta);
+            contaRepository.save(conta);
         }
     }
 
-    public void realizarTransferencia (Long contarOrigemId, Long contaDestinoId, double valor){
-        ContaBancaria contaOrigem = ContaRepository.findContaBancariaById(contarOrigemId);
-        ContaBancaria contaDestino = ContaRepository.findContaBancariaById(contaDestinoId);
+    public void realizarTransferencia (Long contaOrigemId, Long contaDestinoId, double valor){
+        ContaBancaria contaOrigem = contaRepository.findById(contaOrigemId).orElse(null);
+        ContaBancaria contaDestino = contaRepository.findById(contaDestinoId).orElse(null);
+
         if (contaOrigem != null && contaDestino != null){
             contaOrigem.setSaldo(contaOrigem.getSaldo() - valor);
             contaDestino.setSaldo(contaDestino.getSaldo() + valor);
-            ContaRepository.saveContaBancaria(contaOrigem);
-            ContaRepository.saveContaBancaria(contaDestino);
+
+            contaRepository.save(contaOrigem);
+            contaRepository.save(contaDestino);
         }
     }
 }
