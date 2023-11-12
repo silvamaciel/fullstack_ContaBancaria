@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.apibanco.contabancaria.Entitys.Transacao;
+import com.apibanco.contabancaria.Exception.TransacaoInvalidaException;
 import com.apibanco.contabancaria.Repository.TransacaoRepository;
 
 @Service
@@ -14,7 +15,11 @@ public class TransacaoService {
     private TransacaoRepository transacaoRepository;
     
     public List<Transacao> buscarTransacoesDaConta(Long idDaConta) {
-        return transacaoRepository.findByContaId(idDaConta);
+        List<Transacao> transacoes = transacaoRepository.findByContaId(idDaConta);
+        if (transacoes.isEmpty()) {
+            throw new TransacaoInvalidaException("Nenhuma transação encontrada para a conta de ID: " + idDaConta);
+        }
+        return transacoes;
     }
 
     public Transacao registrarTransacao(Transacao transacao) {
