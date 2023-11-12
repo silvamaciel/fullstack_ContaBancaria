@@ -1,34 +1,43 @@
 package com.apibanco.contabancaria.Entitys;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "transacao")
 
 public class Transacao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String tipo;
+    @Column(nullable = false)
     private double valor;
-    private Date dataHora;
+    @Column(nullable = false)
+    private LocalDateTime dataHora;
 
     @ManyToOne
     @JoinColumn(name = "conta_id")
     private ContaBancaria conta;
 
-    public Transacao(Long id, String tipo, double valor, Date dataHora, ContaBancaria conta) {
+    public Transacao(Long id, String tipo, double valor, LocalDateTime dataHora, ContaBancaria conta) {
         this.id = id;
         this.tipo = tipo;
         this.valor = valor;
         this.dataHora = dataHora;
         this.conta = conta;
     }
-
+    
     
     public Transacao() {
     }
@@ -57,20 +66,21 @@ public class Transacao {
         this.valor = valor;
     }
 
-    public Date getDataHora() {
-        return dataHora;
-    }
-
-    public void setDataHora(Date dataHora) {
-        this.dataHora = dataHora;
-    }
-
     public ContaBancaria getConta() {
         return conta;
     }
 
     public void setConta(ContaBancaria conta) {
         this.conta = conta;
+    }
+
+
+    public LocalDateTime getDataHora() {
+        return dataHora;
+    }
+
+    public void setDataHora(LocalDateTime dataHora) {
+        this.dataHora = dataHora;
     }
 
     
